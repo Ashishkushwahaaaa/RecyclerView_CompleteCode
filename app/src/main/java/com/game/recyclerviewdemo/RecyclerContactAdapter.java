@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,6 +24,7 @@ public class RecyclerContactAdapter extends RecyclerView.Adapter<RecyclerContact
     Context context;
     ArrayList<ContactModel> arrContacts;
 
+    private int lastPosition = -1;
 
     public RecyclerContactAdapter(Context context,ArrayList<ContactModel> arrContacts){
         this.context = context;
@@ -39,7 +42,7 @@ public class RecyclerContactAdapter extends RecyclerView.Adapter<RecyclerContact
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
 
-//        ContactModel model = (ContactModel)arrContacts.get(position);
+
         holder.imgContact.setImageResource(arrContacts.get(position).img);
         holder.txtName.setText(arrContacts.get(position).name);
         holder.txtNumber.setText(arrContacts.get(position).number);
@@ -117,6 +120,9 @@ public class RecyclerContactAdapter extends RecyclerView.Adapter<RecyclerContact
             }
         });
 
+        setAnimation(holder.itemView,position);
+
+
     }
 
     @Override
@@ -136,4 +142,16 @@ public class RecyclerContactAdapter extends RecyclerView.Adapter<RecyclerContact
             llRow = itemView.findViewById(R.id.llrow);
         }
     }
+    public void setAnimation(View viewToAnimate,int position){
+
+        if(position>lastPosition) {
+            //This condition is used to make the effect of animation only for the first time
+            Animation slideIn = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+            //If we Want to add our custom animation then only we need to create the anim folder adding how the animation should be and then the path should only be R.anim.xyzfolder
+            viewToAnimate.startAnimation(slideIn);
+            lastPosition=position;
+        }
+    }
 }
+
+
